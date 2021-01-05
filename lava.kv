@@ -1,0 +1,413 @@
+#:kivy 1.11.1
+#:import Clock kivy.clock.Clock
+
+<ScreenManager>:
+    canvas.before:
+        Color:
+            rgba: 0.925, 0.941, 0.945, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+    DefinePlayers:
+        name: 'define_players'
+    ReadyCheck:
+        name: 'ready_check'
+    Game:
+        name: 'game'
+    
+    
+            
+<DefinePlayers>:   
+    BoxLayout:
+        orientation: 'vertical'
+        
+        TextInput:
+            id: player_input
+            size_hint_x : 1
+            size_hint_y : 0.2
+            hint_text: 'Введите имя'
+            font_size: '40sp'
+            halign : 'center'     
+            multiline: False
+            padding_y: (self.height - self.line_height ) / 2
+
+        GridLayout:
+            cols : 2
+            size_hint_y: 0.1
+            Button:
+                text: '[color=#FFFFFF]Добавить[/color]'
+                font_size: '30sp'
+                markup: True
+                background_color: 0.173, 0.243, 0.314, 1
+                id : add_player_button
+                on_release: 
+                    root.add_player()
+                    root.ids.beginner_mode_button.disabled = False
+                    root.ids.fun_mode_button.disabled = False
+                    root.ids.master_mode_button.disabled = False
+            Button:
+                text : '[color=#FFFFFF]Очистить[/color]'  
+                font_size: '30sp'
+                markup: True
+                background_color: 0.173, 0.243, 0.314, 1
+                on_release : 
+                    root.clear_players()
+
+        BoxLayout:
+            id: players_box
+            orientation: 'vertical'
+            size_hint_x : 1
+            size_hint_y : 0.4
+                
+        GridLayout:
+            cols : 5
+            size_hint_y : 0.2
+            Button: 
+                id: beginner_mode_button
+                text: '[color=#FFFFFF]Learn[/color]'
+                font_size: '26sp'
+                markup: True
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                disabled : True
+                on_release: 
+                    root.finalise_players()
+                    root.manager.start_turn_length = 8 - len(root.manager.rules_players) * 0.2
+                    root.manager.end_turn_length = 7 - len(root.manager.rules_players) * 0.2
+                    root.manager.rules_game_mode = 'onboarding'
+                    root.manager.confirm_events = True
+                    app.root.current = "ready_check"
+            Button: 
+                id: fun_mode_button
+                text: '[color=#FFFFFF]Have Fun[/color]'
+                font_size: '26sp'
+                markup: True
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                disabled : True
+                on_release: 
+                    root.finalise_players()
+                    root.manager.start_turn_length = 6 - len(root.manager.rules_players) * 0.2
+                    root.manager.end_turn_length = 7  - len(root.manager.rules_players) * 0.2
+                    root.manager.rules_game_mode = 'fun'
+                    root.manager.confirm_events = False
+                    app.root.current = "ready_check"
+                    
+            Button: 
+                id: master_mode_button
+                text: '[color=#FFFFFF]Master[/color]'
+                font_size: '26sp'
+                markup: True
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                disabled : True
+                on_release: 
+                    root.finalise_players()
+                    root.manager.start_turn_length = 6.8  - len(root.manager.rules_players) * 0.2
+                    root.manager.end_turn_length = 6.2 - len(root.manager.rules_players) * 0.2
+                    root.manager.rules_game_mode = 'master'
+                    root.manager.confirm_events = False
+                    app.root.current = "ready_check"                
+                    
+            Button: 
+                text: 'Next'
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                on_release: 
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.finalise_players()
+                    root.manager.start_turn_length = 1
+                    root.manager.end_turn_length = 1
+                    root.manager.confirm_events = True
+                    root.manager.rules_game_mode = 'master'                
+                    app.root.current = "ready_check"
+            
+            Button: 
+                text: 'Next Test'
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                on_release: 
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.finalise_players()
+                    root.manager.start_turn_length = 0.2
+                    root.manager.end_turn_length = 0.2
+                    root.manager.rules_game_mode = 'fun'
+                    app.root.test_mode = True
+                    app.root.infinite_test_mode = False
+                    app.root.current = "ready_check"
+                    
+            Button: 
+                text: 'Next Test Inf'
+                text_size: self.size
+                background_color: 0.173, 0.243, 0.314, 1
+                halign : 'center'
+                valign : 'center'
+                on_release: 
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.add_player_test()
+                    root.finalise_players()
+                    root.manager.start_turn_length = 0.2
+                    root.manager.end_turn_length = 0.2
+                    root.manager.rules_game_mode = 'onboarding'
+                    app.root.test_mode = True
+                    app.root.infinite_test_mode = True
+                    app.root.current = "ready_check"
+                    app.root.timer_tick = 1
+            
+<ReadyCheck>
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "[color=#2c3e50]Приготовьтесь![/color]"
+            markup: True
+            font_size:'40sp'
+        Label:
+            text: "[color=#2c3e50]Игроков: " + str(len(root.manager.rules_players)) + '[/color]'
+            markup: True
+            font_size:'40sp'
+        Button:
+            id : start_button
+            text : '[color=#FFFFFF]Начать[/color]'
+            font_size:'40sp'
+            markup: True
+            background_color: 0.173, 0.243, 0.314, 1
+            on_release:
+                app.root.current = "game"
+                app.root.start_game()                
+        
+<Game>        
+    id: game_screen
+    
+    ### Player names and turn text    
+    Label: ### Up Turn Text
+        id: up_turn_text
+        canvas.before:
+            PushMatrix
+            Rotate:
+                angle: 180
+                origin: self.center
+        canvas.after:
+            PopMatrix
+        size_hint_y : None
+        height : root.height * 0.24
+        pos : (0, root.height * (1 - 0.24))
+        font_size: '22sp'
+        text: '[color=#2c3e50]' + root.manager.turn_object + '[/color]'
+        text_size: self.size
+        halign : 'center'
+        valign : 'center'
+        markup: True    
+    Label: ### Up Player Name
+        canvas.before:
+            PushMatrix
+            Rotate:
+                angle: 180
+                origin: self.center
+            Color: 
+                rgba: 0.173, 0.243, 0.314, 1
+            Rectangle:
+                pos: self.pos
+                size: (root.width,self.height)
+        canvas.after:
+            PopMatrix
+        size_hint_y : None
+        height : root.height * 0.06
+        pos : (0, root.height * (1 - 0.24 - 0.06))
+        font_size: '26sp'
+        text: '[color=#FFFFFF]' + root.manager.turn_player_name + '[/color]'
+        text_size: self.size
+        halign : 'center'
+        valign : 'center'
+        markup: True      
+    Label: ### Down Player Name    
+        canvas.before:
+            Color: 
+                rgba: 0.173, 0.243, 0.314, 1    
+            Rectangle:
+                pos: self.pos
+                size: (root.width, self.height)                
+        size_hint_y : None
+        height : root.height * 0.06
+        pos : (0, root.height * 0.24)
+        font_size: '26sp'
+        text: '[color=#FFFFFF]' + root.manager.turn_player_name + '[/color]'
+        text_size: self.size
+        halign : 'center'
+        valign : 'center'
+        markup: True    
+    Label: ### Down Turn Text    
+        id: down_turn_text
+        size_hint_y : None
+        height : root.height * 0.24
+        font_size: '22sp'
+        text: '[color=#2c3e50]' + root.manager.turn_object + '[/color]'
+        text_size: self.size
+        halign : 'center'
+        valign : 'center'
+        markup: True
+    
+    ### Object image
+    FloatLayout:
+        id: object_image
+        
+    ### Event choices area
+    BoxLayout:
+        id: event_choice_pie
+    BoxLayout:
+        id: middle_text_up
+        canvas.before:
+            PushMatrix
+            Rotate:
+                angle: 180
+                origin: self.center
+        canvas.after:
+            PopMatrix
+        pos: (root.width / 2 - root.height * 0.2 * 0.7, root.height / 2)
+        size_hint : (None, None)
+        size: (root.height * 0.4 * 0.7, root.height * 0.2 * 0.7)
+    BoxLayout:
+        id: middle_text_down
+        pos: (root.width / 2 - root.height * 0.2 * 0.7, root.height / 2 - root.height * 0.2 * 0.7)
+        size_hint : (None, None)
+        size: (root.height * 0.4 * 0.7, root.height * 0.2 * 0.7)    
+
+    GridLayout:
+        id : event_choice_buttons
+        rows : 2
+        cols : 2
+        size_hint : (None, None)
+        pos : (root.width / 2 - root.height * 0.2 * 0.7, root.height / 2 - root.height * 0.2 * 0.7)
+        size : (root.height * 0.4 * 0.7, root.height * 0.4 * 0.7)   
+        Button:
+            id : event_button1
+            background_color: 0, 0, 0, 0
+            markup: True
+            font_size : '14sp'
+            _cb: []
+            disabled : False
+            on_release: 
+                app.root.reset_event_choice_buttons()
+                root.ids.pause_button.disabled = False
+                root.ids.pause_button.opacity = 1
+                root.ids.next_turn_button.disabled = False
+                root.ids.next_turn_button.opacity = 1
+        Button:
+            id : event_button2
+            font_size : '14sp'
+            markup: True
+            background_color: 0, 0, 0, 0
+            _cb: []
+            disabled : True
+            on_release: 
+                app.root.reset_event_choice_buttons()
+                root.ids.pause_button.disabled = False
+                root.ids.pause_button.opacity = 1
+                root.ids.next_turn_button.disabled = False
+                root.ids.next_turn_button.opacity = 1
+        Button:
+            id : event_button4
+            font_size : '14sp'
+            markup: True
+            background_color: 0, 0, 0, 0
+            _cb: []
+            disabled : True
+            on_release: 
+                app.root.reset_event_choice_buttons()
+                root.ids.pause_button.disabled = False
+                root.ids.pause_button.opacity = 1
+                root.ids.next_turn_button.disabled = False
+                root.ids.next_turn_button.opacity = 1
+        Button:
+            id : event_button3
+            font_size : '14sp'
+            markup: True
+            background_color: 0, 0, 0, 0
+            _cb: []
+            disabled : True
+            on_release: 
+                app.root.reset_event_choice_buttons()
+                root.ids.pause_button.disabled = False
+                root.ids.pause_button.opacity = 1
+                root.ids.next_turn_button.disabled = False
+                root.ids.next_turn_button.opacity = 1
+    FloatLayout:
+        ### Timer
+        canvas:
+            ### Total timer
+            Color:
+                rgba: 0.173, 0.243, 0.314, 1            
+            Line:
+                circle : (self.width/ 2, self.height / 2, self.height * (0.2 - 0.01))
+                width : self.height * 0.01
+            ### Filled timer
+            Color:
+                rgba: 0.925, 0.941, 0.945, 1
+            Line:
+                circle : (self.width/ 2, self.height / 2, self.height * (0.2 - 0.01), 0, (1 - root.manager.turn_progress_bar_value) * 360)
+                width : self.height * 0.01
+        Button:
+            id : pause_button
+            text : '[color=#2c3e50]Пауза[/color]'
+            font_size: '16sp'
+            markup: True
+            background_color: 0, 0, 0, 0     
+            pos : (0, root.height * 0.3)
+            size_hint : (None, None)
+            size : (root.width / 2 - root.height * 0.2 * 0.7,  root.height * 0.1)
+            on_release:
+                app.root.pause_resume()
+                ###app.root.test_f2()
+        Button:
+            text : '[color=#2c3e50]Выйти[/color]'
+            font_size: '16sp'
+            markup: True
+            background_color: 0, 0, 0, 0
+            pos : (root.width / 2 + root.height * 0.2 * 0.7, root.height * 0.3)
+            size_hint : (None, None)
+            size : (root.width / 2 - root.height * 0.2 * 0.7,  root.height * 0.1)
+            on_release:                    
+                app.root.restart()
+        Button:
+            id : next_turn_button
+            text : '[color=#2c3e50]След.Ход[/color]'
+            font_size: '16sp'
+            markup: True
+            background_color: 0, 0, 0, 0
+            pos : (0, root.height * 0.7 - root.height * 0.1)
+            size_hint : (None, None)
+            size : (root.width / 2 - root.height * 0.2 * 0.7,  root.height * 0.1)
+            on_release:
+                app.root.next_turn()
+                root.ids.next_turn_button.disabled = True
+                root.ids.next_turn_button.opacity = 0
+                ###app.root.test_f1()
+        Button:
+            id: win_test_button
+            text : '[color=#2c3e50]Улететь[/color]'
+            font_size: '16sp'
+            markup: True
+            background_color: 0, 0, 0, 0          
+            pos : (root.width / 2 + root.height * 0.2 * 0.7, root.height * 0.7 - root.height * 0.1)
+            size_hint : (None, None)
+            size : (root.width / 2 - root.height * 0.2 * 0.7,  root.height * 0.1)
+            _cb: []

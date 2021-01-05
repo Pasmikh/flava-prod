@@ -1,0 +1,27 @@
+New UBUNTU
+chmod 400 /Users/Shared/Lava/ProdVersion/lava.pem
+ssh -i /Users/Shared/Lava/App/lava.pem ubuntu@ec2-3-136-97-14.us-east-2.compute.amazonaws.com
+scp -i /Users/Shared/Lava/App/lava.pem -r /Users/Shared/Lava/App/DevVersion_nd ubuntu@ec2-3-136-97-14.us-east-2.compute.amazonaws.com:lava_2
+scp -i /Users/Shared/Lava/App/lava.pem -r /Users/Shared/Lava/App/DevVersion_nd/main.py ubuntu@ec2-3-136-97-14.us-east-2.compute.amazonaws.com:lava_2/main.py
+
+# Install packages
+sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+pip3 install --user --upgrade Cython==0.29.19 virtualenv  # the --user should be removed if you do this in a venv
+
+# Install buildozer
+pip3 install --user buildozer
+export PATH=~/.local/bin/:$PATH
+. ~/.bashrc
+`which buildozer`
+
+cd ../lava
+buildozer init
+buildozer android debug deploy run
+
+# Download an app
+scp -i /Users/Shared/Lava/App/lava.pem -r ubuntu@ec2-3-136-97-14.us-east-2.compute.amazonaws.com:lava_2/bin/myapp-0.1-armeabi-v7a-debug.apk /Users/Shared/Lava/App/
+
+# Other
+scp -i /Users/Shared/Lava/App/Objects/lava.pem -r /Users/Shared/Lava/App/Objects/ProdVersion/main.py ubuntu@ec2-3-135-239-150.us-east-2.compute.amazonaws.com:lava_obj/main.py
+scp -i /Users/Shared/Lava/App/Objects/lava.pem -r /Users/Shared/Lava/App/Objects/ProdVersion/events.py ubuntu@ec2-3-135-239-150.us-east-2.compute.amazonaws.com:lava_obj/events.py
+scp -i /Users/Shared/Lava/App/Objects/lava.pem -r /Users/Shared/Lava/App/Objects/ProdVersion/lava.kv ubuntu@ec2-3-135-239-150.us-east-2.compute.amazonaws.com:lava_obj/lava.kv
