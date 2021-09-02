@@ -68,7 +68,7 @@ class ScreenManager(ScreenManager):
     heart_slow_sound = SoundLoader.load('Sounds/heartbeat_slow.wav')
     heart_norm_sound = SoundLoader.load('Sounds/heartbeat_normal.wav')
     heart_fast_sound = SoundLoader.load('Sounds/heartbeat_fast.wav')
-    end_turn_sound = SoundLoader.load('Sounds/end_turn4.wav')    
+    end_turn_sound = SoundLoader.load('Sounds/end_turn.wav')    
     eliminate_sound = SoundLoader.load('Sounds/eliminate.wav')    
     win_sound = SoundLoader.load('Sounds/win.wav')  
     
@@ -78,6 +78,10 @@ class ScreenManager(ScreenManager):
     img_golovolomka_red = "ObjectImages/JPGs/golovolomka_red.jpg"
     img_busina_green = "ObjectImages/JPGs/busina_green.jpg"
     img_busina_red = "ObjectImages/JPGs/busina_red.jpg"
+    img_list_green = "ObjectImages/JPGs/list_green.jpg"
+    img_list_red = "ObjectImages/JPGs/list_red.jpg"
+    img_pero_green = "ObjectImages/JPGs/pero_green.jpg"
+    img_pero_red = "ObjectImages/JPGs/pero_red.jpg"
     img_covid_green = "ObjectImages/JPGs/covid_big_green.jpg"
     img_covid_red = "ObjectImages/JPGs/covid_big_red.jpg"
     img_naperstok_green = "ObjectImages/JPGs/naperstok_green.jpg"
@@ -101,10 +105,10 @@ class ScreenManager(ScreenManager):
                   "Наперсток" : 'naperstok',
                   "Вилка" : 'vilka',
                   "Ковид" : 'covid_big',
-                  "Бусина" : 'busina',
+                  "Лист" : 'list',
                   "Перчик" : 'perchik',
                   "Прищепка" : 'prischepka',
-                  "Головоломка" : 'golovolomka',
+                  "Перо" : 'pero',
                   'key': 'sharik'}
     
     # Tech variables
